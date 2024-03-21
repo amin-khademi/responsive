@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:responsive__chat/pages/dashboard.dart';
+import 'package:responsive__chat/pages/responsive/split_screen.dart';
 import 'package:responsive__chat/pages/user/user_grid.dart';
 import 'package:responsive__chat/pages/user/user_list.dart';
-
 
 enum ResponsiveSizes {
   mobile,
   tablet,
   desktopWeb;
 
-  // TODO: Add logic
+  // tip
   static ResponsiveSizes whichDevice() {
-    return ResponsiveSizes.mobile;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final phisicalWidth = view.physicalSize.width;
+    final devicePixelRatio = view.devicePixelRatio;
+    final widthInLogicalPixels = phisicalWidth / devicePixelRatio;
+
+    return switch (widthInLogicalPixels) {
+      <= 600 => ResponsiveSizes.mobile,
+      >= 600.1 && <= 1024 => ResponsiveSizes.tablet,
+      _ => ResponsiveSizes.desktopWeb,
+    };
+
+    // return ResponsiveSizes.mobile;
   }
 }
 
@@ -33,7 +44,7 @@ class SelectedPage {
   ];
 
   static final List<Widget> bodySelectedPageSplitScreen = <Widget>[
-    // TODO: add SplitScreen
+    const SplitScreen(),
     const UserGrid(),
     const Dashboard(),
   ];
